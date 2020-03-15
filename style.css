@@ -1,0 +1,12 @@
+.resizable {
+    resize: both;
+    overflow: auto;
+}
+
+.health {
+    resize: both;
+    overflow: auto;
+    width: 100px;
+    height: 100px;
+    background-color: red;
+}
