@@ -7,20 +7,26 @@
 
         var categories = ["E", "D", "C", "B", "A"];
         
-        
-        alert (categories[0]+ categories[1]);
-        alert (categories[0]+ categories[2]);
-        alert (categories[0]+ categories[3]);
-        alert (categories[0]+ categories[4]);
+        for (var i=1;i<=4;i++)
+        { 
+            alert (categories[0]+ categories[i]);
+        }
 
-        alert (categories[1]+ categories[2]);
-        alert (categories[1]+ categories[3]);
-        alert (categories[1]+ categories[4]);
-        
-        alert (categories[2]+ categories[3]);
-        alert (categories[2]+ categories[4]);
+        for (var i=2;i<=4;i++)
+        {
+            alert (categories[1]+ categories[i]);
+        }
 
-        alert (categories[3]+ categories[4]);
+        for (var i=3;i<=4;i++)
+        { 
+            alert (categories[2]+ categories[i]);
+        }
+        
+        for (var i=4;i<=4;i++)
+        {
+            alert (categories[3]+ categories[i]);
+        }
+
         
 
       </script>  
