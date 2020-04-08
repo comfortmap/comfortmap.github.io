@@ -4,39 +4,24 @@
     </head>
     <body>
       <script>
-          var a=1; 
-          var b=2;
-          var c=3;
 
-          alert(a + " " + b + " " + c);
-
-          if (a>b)
-          { 
-            var x=a;
-            a=b;
-            b=x;
-          }
-
-          alert(a + " " + b + " " + c);
-          if (b>c)
-          { 
-            var x=b;
-            b=c;
-            c=x;
-          }
-
-          alert(a + " " + b + " " + c);
-
-          if (a>b)
-          { 
-            var x=a;
-            a=b;
-            b=x;
-          }
-
-          alert(a + " " + b + " " + c);
-
-
+        var n = [5,1,9,8,3 ];
+        
+        for (var j=n.length-1; j>0;j--)
+        {
+            for (var i=0;i<j;i++)
+            {
+                alert(n[0] + " " + n[1] + " " + n[2] + " " + n[3] + " " + n[4]);
+                if (n[i]>n[i+1])
+                { 
+                    var x=n[i];
+                    n[i]=n[i+1];
+                    n[i+1]=x;
+                }
+            }
+        }
+        
+        alert(n[0] + " " + n[1] + " " + n[2] + " " + n[3]);
 
       </script>  
     </body>
