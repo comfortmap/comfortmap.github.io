@@ -2,19 +2,65 @@
     <head>
         <title>Sort</title>
     </head>
-    <body>
-      <script>
-
-        var categories = ["F", "E", "D", "C", "B", "A"];
-        
-        for (var j = 0; j < categories.length - 1; j++)
+    <script>
+        window.onload = function()
         {
-            for (var i = j + 1; i <= categories.length - 1; i++)
-            { 
-                alert (categories[j]+ categories[i]);
-            }
-        }
+          var categories = ["F", "E", "D", "C", "B", "A"]; 
 
-      </script>  
+          function createRadioButton(id, name, value)
+          {
+            var element = document.createElement("input");
+            element.setAttribute("type", "radio");
+            element.setAttribute("id", id);
+            element.setAttribute("name", name);
+            element.setAttribute("value", value);
+            return element;
+          }
+
+          function createLabel(id, text)
+          {
+            var element = document.createElement("label");
+            element.setAttribute("for", id);
+            element.innerText = text;
+            return element;
+          }
+
+          function createDiv(text)
+          {
+            var element = document.createElement("div");
+            element.innerText = text;
+            return element;
+          }
+
+          function createQuestion(questionNo, questionText, firstOptionText, secondOptionText)
+          {
+            var firstOptionId = `question-${questionNo}-first-option`;
+            var secondOptionId = `question-${questionNo}-second-option`;
+            var radioButtonGroup = `question-${questionNo}-options`;
+
+            return {
+              text: createDiv(questionText),
+              firstOption: createRadioButton(firstOptionId, radioButtonGroup, firstOptionText),
+              firstOptionLabel: createLabel(firstOptionId, firstOptionText),
+              secondOption: createRadioButton(secondOptionId, radioButtonGroup, secondOptionText),
+              secondOptionLabel: createLabel(secondOptionId, secondOptionText)
+            };
+          }
+
+          for (var questionNo = 1; questionNo <= 3; questionNo++)
+          {
+            var question = createQuestion(questionNo, "Which one is more important?", categories[questionNo], categories[questionNo+1]);
+
+            document.body.appendChild(question.text);
+            document.body.appendChild(question.firstOption);
+            document.body.appendChild(question.firstOptionLabel);
+            document.body.appendChild(question.secondOption);
+            document.body.appendChild(question.secondOptionLabel);
+          }
+          
+        }
+    </script>
+    <body>
+      
     </body>
 </html>
