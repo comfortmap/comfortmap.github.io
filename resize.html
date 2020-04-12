@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>Comfort Map</title>
+        <script>
+            window.onload = function()
+            {
+                var button = document.getElementById("compute");
+                
+                button.addEventListener("click", function(){
+                    
+                    var shape = document.getElementById("shape");
+                
+                    var width = shape.clientWidth;
+                    var height = shape.clientHeight;
+                    var area = width * height;
+
+                    document.getElementById("width").innerText = "Width: " + width;
+                    document.getElementById("height").innerText = "Height: " + height;
+                    document.getElementById("area").innerText = "Area: " + area;
+                });
+            }
+        </script>
+        <style>
+            .category {
+                resize: both;
+                overflow: auto;
+                width: 100px;
+                height: 100px;
+                max-width: 300px;
+                max-height: 300px;
+                background-color: gray;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Comfort Map</h1>
+        
+        <h2>Category</h2>
+        <div id="shape" class="category"></div>
+        
+        <h2>Category Details</h2>
+
+        <button id="compute">Compute</button>
+
+        <p id="width"></p>
+        <p id="height"></p>
+        <p id="area"></p>
+    </body>
+</html>
