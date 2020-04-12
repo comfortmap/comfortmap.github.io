@@ -6,6 +6,7 @@
         window.onload = function()
         {
           var categories = ["F", "E", "D", "C", "B", "A"]; 
+          var importance = [1, 1, 1, 1, 1, 1];
 
           function createRadioButton(id, name, value)
           {
@@ -32,35 +33,109 @@
             return element;
           }
 
-          function createQuestion(questionNo, questionText, firstOptionText, secondOptionText)
+          function createFirstOption(questionNo, firstOptionText) 
           {
             var firstOptionId = `question-${questionNo}-first-option`;
+            var radioButtonGroup = `question-${questionNo}-options`;
+            var element = createRadioButton(firstOptionId, radioButtonGroup, firstOptionText);
+            element.checked = true;
+            return element;
+          }
+
+          function createSecondOption(questionNo, secondOptionText)
+          {
             var secondOptionId = `question-${questionNo}-second-option`;
             var radioButtonGroup = `question-${questionNo}-options`;
+            var element = createRadioButton(secondOptionId, radioButtonGroup, secondOptionText);
+            return element;
+          }
 
+          function createQuestion(questionNo, firstOptionText, secondOptionText)
+          {
+            var firstOption = createFirstOption(questionNo, firstOptionText);
+            var secondOption = createSecondOption(questionNo, secondOptionText);
+            
             return {
-              text: createDiv(questionText),
-              firstOption: createRadioButton(firstOptionId, radioButtonGroup, firstOptionText),
-              firstOptionLabel: createLabel(firstOptionId, firstOptionText),
-              secondOption: createRadioButton(secondOptionId, radioButtonGroup, secondOptionText),
-              secondOptionLabel: createLabel(secondOptionId, secondOptionText)
+              text: createDiv("Which one is more important?"),
+              firstOption: firstOption,
+              firstOptionLabel: createLabel(firstOption.id, firstOptionText),
+              secondOption: secondOption,
+              secondOptionLabel: createLabel(secondOption.id, secondOptionText)
             };
           }
 
-          for (var questionNo = 1; questionNo <= 3; questionNo++)
+          function show(question)
           {
-            var question = createQuestion(questionNo, "Which one is more important?", categories[questionNo], categories[questionNo+1]);
-
-            document.body.appendChild(question.text);
-            document.body.appendChild(question.firstOption);
-            document.body.appendChild(question.firstOptionLabel);
-            document.body.appendChild(question.secondOption);
-            document.body.appendChild(question.secondOptionLabel);
+            var questions = document.getElementById("questions");
+            questions.appendChild(question.text);
+            questions.appendChild(question.firstOption);
+            questions.appendChild(question.firstOptionLabel);
+            questions.appendChild(question.secondOption);
+            questions.appendChild(question.secondOptionLabel);
           }
-          
+
+          function createNextButton()
+          {
+            var element = document.createElement("button");
+            element.id = "next";
+            element.innerText = "Next";
+            return element;
+          }
+
+          var i=0;
+          var j=1;
+
+          function goToNextPair(){
+            if (j < categories.length - 1)
+            {
+              j++;
+            }
+            else 
+            {
+              i++;
+              j=i+1;
+            }
+          }
+
+          function isLastPair()
+          {
+            return (i == categories.length - 2) && (j == categories.length - 1);
+          }
+
+          var questionNo = 1;
+          var question = createQuestion(questionNo++, categories[i], categories[j]);
+          show(question);
+
+          var next = createNextButton();          
+          next.onclick = function()
+          {
+            if (question.firstOption.checked) 
+            {
+              importance[i]++;
+            }
+            else if (question.secondOption.checked) 
+            {
+              importance[j]++;
+            }
+
+            if (isLastPair())
+            {
+              var button = document.getElementById("next");
+              document.body.removeChild(button);
+              console.log(importance);
+              return;
+            }
+            else 
+            {
+              goToNextPair();
+            }
+            question = createQuestion(questionNo++, categories[i], categories[j]);
+            show(question);
+          }
+          document.body.appendChild(next);
         }
     </script>
     <body>
-      
+      <div id="questions"></div>
     </body>
 </html>
