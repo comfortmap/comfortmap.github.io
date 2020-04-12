@@ -4,43 +4,200 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
         <script>
             window.onload = function(){
-                var options = {
-                    responsive: false,
-                    scale: {
-                        angleLines: {
-                            display: false
-                        },
-                        ticks: {
-                            suggestedMin: 0,
-                            suggestedMax: 6
-                        }
-                    }
-                };
-
-                var data =  {
-                    labels: ['Career', 'Relationships', 'Wealth', 'Health', 'Personal Development', 'Social Life'],
-                    datasets: [{
-                        label: 'Importance',
-                        data: [4, 5, 6, 2, 1, 3]
-                    },{
-                        label: 'Comfort',
-                        data: [2, 5, 3, 6, 4, 1]
-                    }]
+                
+                function createRadioButton(id, name, value)
+                {
+                    var element = document.createElement("input");
+                    element.setAttribute("type", "radio");
+                    element.setAttribute("id", id);
+                    element.setAttribute("name", name);
+                    element.setAttribute("value", value);
+                    return element;
                 }
 
-                var ctx = document.getElementById('radar-canvas').getContext('2d');
+                function createLabel(id, text)
+                {
+                    var element = document.createElement("label");
+                    element.setAttribute("for", id);
+                    element.innerText = text;
+                    return element;
+                }
 
-                var radar = new Chart(ctx, {
-                    type: 'radar',
-                    data: data,
-                    options: options
-                });
+                function createText(text)
+                {
+                    var element = document.createElement("div");
+                    element.innerText = text;
+                    return element;
+                }
+
+                function createDiv(id)
+                {
+                    var element = document.createElement("div");
+                    element.id = id;
+                    return element;
+                }
+
+                function createFirstOption(questionNo, firstOptionText) 
+                {
+                    var firstOptionId = `question-${questionNo}-first-option`;
+                    var radioButtonGroup = `question-${questionNo}-options`;
+                    var element = createRadioButton(firstOptionId, radioButtonGroup, firstOptionText);
+                    element.checked = true;
+                    return element;
+                }
+
+                function createSecondOption(questionNo, secondOptionText)
+                {
+                    var secondOptionId = `question-${questionNo}-second-option`;
+                    var radioButtonGroup = `question-${questionNo}-options`;
+                    var element = createRadioButton(secondOptionId, radioButtonGroup, secondOptionText);
+                    return element;
+                }
+
+                function createQuestion(questionNo, firstOptionText, secondOptionText)
+                {
+                    var firstOption = createFirstOption(questionNo, firstOptionText);
+                    var secondOption = createSecondOption(questionNo, secondOptionText);
+                    
+                    return {
+                        text: createText("Which one is more important?"),
+                        firstOption: firstOption,
+                        firstOptionLabel: createLabel(firstOption.id, firstOptionText),
+                        secondOption: secondOption,
+                        secondOptionLabel: createLabel(secondOption.id, secondOptionText)
+                    };
+                }
+
+                function show(question)
+                {
+                    var questions = document.getElementById("questions");
+                    questions.appendChild(question.text);
+                    questions.appendChild(question.firstOption);
+                    questions.appendChild(question.firstOptionLabel);
+                    questions.appendChild(question.secondOption);
+                    questions.appendChild(question.secondOptionLabel);
+                }
+
+                function createNextButton()
+                {
+                    var element = document.createElement("button");
+                    element.id = "next";
+                    element.innerText = "Next";
+                    return element;
+                }
+
+                function createCanvas()
+                {
+                    var canvas = document.createElement("canvas");
+                    canvas.setAttribute("width", 400);
+                    canvas.setAttribute("height", 400);
+                    canvas.id = "radar";
+                    return canvas;
+                }
+
+                function createRadar()
+                {
+                    var canvas = createCanvas();
+                    document.body.appendChild(canvas);
+
+                    var context = canvas.getContext('2d');
+
+                    var data = {
+                        labels: categories,
+                        datasets: [{
+                            label: 'Importance',
+                            data: importance
+                        },{
+                            label: 'Comfort',
+                            data: [2, 5, 3, 6, 4, 1]
+                        }]
+                    };
+
+                    var options = {
+                        responsive: false,
+                        scale: {
+                            angleLines: {
+                                display: false
+                            },
+                            ticks: {
+                                suggestedMin: 0,
+                                suggestedMax: 6
+                            }
+                        }
+                    };
+
+                    var radar = new Chart(context, {
+                        type: 'radar',
+                        data: data,
+                        options: options
+                    });
+                }
+
+                var categories = ['Career', 'Relationships', 'Wealth', 'Health', 'Personal Development', 'Social Life']; 
+                var importance = [1, 1, 1, 1, 1, 1];
+
+                var questions = document.createElement("div");
+                questions.id = "questions";
+                document.body.appendChild(questions);
+                
+                var i=0;
+                var j=1;
+
+                var questionNo = 1;
+                var question = createQuestion(questionNo++, categories[i], categories[j]);
+                show(question);
+
+                function compareNextPair() 
+                {
+                    if (question.firstOption.checked) 
+                    {
+                        importance[i]++;
+                    }
+                    else if (question.secondOption.checked) 
+                    {
+                        importance[j]++;
+                    }
+
+                    if (isLastPair())
+                    {
+                        var button = document.getElementById("next");
+                        document.body.removeChild(button);
+                        createRadar();
+                        return;
+                    }
+                    else 
+                    {
+                        goToNextPair();
+                    }
+                    question = createQuestion(questionNo++, categories[i], categories[j]);
+                    show(question);
+                }
+
+                function goToNextPair()
+                {
+                    if (j < categories.length - 1)
+                    {
+                        j++;
+                    }
+                    else 
+                    {
+                        i++;
+                        j=i+1;
+                    }
+                }
+
+                function isLastPair()
+                {
+                    return (i == categories.length - 2) && (j == categories.length - 1);
+                }
+
+                var next = createNextButton();          
+                next.onclick = compareNextPair;
+                document.body.appendChild(next);
             }
         </script>
     </head>
     <body>
-        <h1>Comfort Radar</h1>
         
-        <canvas id="radar-canvas" width="400" height="400"></canvas>
     </body>
 </html>
