@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Slider test</title>
+        <script>
+             window.onload = function()
+             {
+                function createSlider(id, name, min, max, value)
+                {
+                    var element = document.createElement("input");
+                    element.setAttribute("type", "range");
+                    element.setAttribute("id", id);
+                    element.setAttribute("name", name);
+                    element.setAttribute("min", min);
+                    element.setAttribute("max", max);
+                    element.setAttribute("value", value);
+                    return element;
+                }
+
+                var slider = createSlider("slider", "slider", 0, 6, 1);
+                document.body.appendChild(slider);
+
+             }
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
