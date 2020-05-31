@@ -3,7 +3,14 @@
         <title>Slider test</title>
         <script>
              window.onload = function()
-             {
+             {                 
+                function createText(text)
+                {
+                    var element = document.createElement("div");
+                    element.innerText = text;
+                    return element;
+                }
+
                 function createSlider(id, name, min, max, value)
                 {
                     var element = document.createElement("input");
@@ -16,9 +23,21 @@
                     return element;
                 }
 
-                var slider = createSlider("slider", "slider", 0, 6, 1);
-                document.body.appendChild(slider);
+                function getComfortLevels()
+                {
+                    for (var i=0;i<categories.length;i++)
+                    {
+                        var category = createText(categories[i]);
+                        document.body.appendChild(category);
 
+                        var slider = createSlider("slider", "slider", 0, 6, 1);
+                        document.body.appendChild(slider);
+                    }
+                }
+
+                var categories = ['Career', 'Relationships', 'Wealth', 'Health', 'Personal Development', 'Social Life']; 
+                
+                getComfortLevels();
              }
         </script>
     </head>
