@@ -78,11 +78,11 @@
                     questions.appendChild(question.secondOptionLabel);
                 }
 
-                function createNextButton()
+                function createButton(id, text)
                 {
                     var element = document.createElement("button");
-                    element.id = "next";
-                    element.innerText = "Next";
+                    element.id = id;
+                    element.innerText = text;
                     return element;
                 }
 
@@ -109,7 +109,7 @@
                             data: importance
                         },{
                             label: 'Comfort',
-                            data: [2, 5, 3, 6, 4, 1]
+                            data: comfort
                         }]
                     };
 
@@ -133,8 +133,21 @@
                     });
                 }
 
+                function createSlider(id, name, min, max, value)
+                {
+                    var element = document.createElement("input");
+                    element.setAttribute("type", "range");
+                    element.setAttribute("id", id);
+                    element.setAttribute("name", name);
+                    element.setAttribute("min", min);
+                    element.setAttribute("max", max);
+                    element.setAttribute("value", value);
+                    return element;
+                }
+
                 var categories = ['Career', 'Relationships', 'Wealth', 'Health', 'Personal Development', 'Social Life']; 
                 var importance = [1, 1, 1, 1, 1, 1];
+                var comfort = [1, 1, 1, 1, 1, 1];
 
                 var questions = document.createElement("div");
                 questions.id = "questions";
@@ -146,6 +159,29 @@
                 var questionNo = 1;
                 var question = createQuestion(questionNo++, categories[i], categories[j]);
                 show(question);
+
+                var sliders = [];
+                function getComfortLevels()
+                {
+                    var container = createDiv("comfort");
+
+                    for (var i=0;i<categories.length;i++)
+                    {
+                        var category = createText(categories[i]);
+                        container.appendChild(category);
+
+                        var slider = createSlider("slider", "slider", 0, 6, 1);
+                        sliders.push(slider);
+                        container.appendChild(slider);
+                    }
+
+                    document.body.appendChild(container);
+                }
+
+                function generateMap(){
+                    comfort = sliders.map(s=>s.value);
+                    createRadar();
+                }
 
                 function compareNextPair() 
                 {
@@ -162,10 +198,16 @@
                     {
                         var button = document.getElementById("next");
                         document.body.removeChild(button);
-                        createRadar();
+                        
+                        getComfortLevels();
+
+                        var map = createButton("map", "Generate Map");
+                        map.onclick = generateMap;
+                        document.body.appendChild(map);
+
                         return;
                     }
-                    else 
+                    else
                     {
                         goToNextPair();
                     }
@@ -191,7 +233,7 @@
                     return (i == categories.length - 2) && (j == categories.length - 1);
                 }
 
-                var next = createNextButton();          
+                var next = createButton("next", "Next");
                 next.onclick = compareNextPair;
                 document.body.appendChild(next);
             }
